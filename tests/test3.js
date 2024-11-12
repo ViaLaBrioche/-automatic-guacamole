@@ -22,7 +22,7 @@ const {By, until, Key} = require("selenium-webdriver");
     // Находим выпадающий список Списать с
     await driver.findElement(By.id("dropdown_CLN_ACCOUNT")).click();
     //Выбираем счет списания
-    await driver.findElement(By.xpath("//*[@id='dropdown_CLN_ACCOUNT']/div-tag[2]/a[60]")).click();
+    await driver.findElement(By.xpath("//*[@id='dropdown_CLN_ACCOUNT']/div-tag[2]/a[61]")).click();
     //Находим блок Назначение платежа и заполняем его
     await driver.findElement(By.id("PAYMENT_DETAILS:text_area")).sendKeys("Test");
     //Находим выпадающее меню Расходы по переводу и открываем
@@ -96,10 +96,10 @@ const {By, until, Key} = require("selenium-webdriver");
     //нажимаем кнопку Далее
     await driver.findElement(By.id("j_id_5e_eu:nextBtnAjax")).click();
     //Ожидаем загрузки страницы
-    await driver.wait(until.elementLocated(By.id('j_id_5e_2lc:sendBtn'), 10000));
+    await driver.wait(until.elementLocated(By.id('j_id_5e_2lc:sendBtn'), 20000));
     //Нажимаем кнопку Отправить в банк
     await driver.findElement(By.id("j_id_5e_2lc:sendBtn")).click(); 
-    await driver.sleep(2000)
+    await driver.sleep(6000)
 }
 
 module.exports = { test3 } 

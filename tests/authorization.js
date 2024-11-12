@@ -12,6 +12,7 @@ const {By, until} = require("selenium-webdriver");
         }, 10000)
     }
 
+    
     // Запускаем функцию ожидания активации кнопки
     await waitButtonEnabled("j_id_5g_5:loginBtn")
     // Нажимаем кнопку "Войти" на странице ввода логина

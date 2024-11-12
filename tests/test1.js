@@ -4,7 +4,7 @@ const {By, until} = require("selenium-webdriver");
     //Переход на страницу создания рублевого перевода
     await driver.get("https://mb1.bbr.ru/web_banking/protected/doc/rubles_transfer/new");
     //Находим поле Сумма и заполняем
-    await driver.findElement(By.id("AMOUNT")).sendKeys(100.01);
+    await driver.findElement(By.id("AMOUNT")).sendKeys(111);
     //Находим выпадающий список Списать с
     await driver.findElement(By.className("select-text")).click();
     //Выбираем счет списания
@@ -27,7 +27,8 @@ const {By, until} = require("selenium-webdriver");
     await driver.wait(until.elementLocated(By.id('j_id_5e_2ls:sendBtn'), 10000));
     //Нажимаем кнопку отправить в банк
     await driver.findElement(By.id('j_id_5e_2ls:sendBtn')).click();
-
+    //Ожидание выполнения операции
+    await driver.wait(until.elementLocated(By.id('menuLine'), 10000));
 }
 
 module.exports = { test1 } 

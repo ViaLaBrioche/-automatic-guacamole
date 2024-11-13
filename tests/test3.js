@@ -1,6 +1,6 @@
 const {By, until, Key} = require("selenium-webdriver");
 
- async function test3(driver) {
+ async function test3({driver, accountDebitName, accountSelection}) {
 
     //Открытие модального окна "страна" и выбор желаемой по номеру кода
     async function filterListModal(code) {
@@ -22,7 +22,7 @@ const {By, until, Key} = require("selenium-webdriver");
     // Находим выпадающий список Списать с
     await driver.findElement(By.id("dropdown_CLN_ACCOUNT")).click();
     //Выбираем счет списания
-    await driver.findElement(By.xpath("//*[@id='dropdown_CLN_ACCOUNT']/div-tag[2]/a[61]")).click();
+    await accountSelection(accountDebitName, 'CLN_ACCOUNT')
     //Находим блок Назначение платежа и заполняем его
     await driver.findElement(By.id("PAYMENT_DETAILS:text_area")).sendKeys("Test");
     //Находим выпадающее меню Расходы по переводу и открываем

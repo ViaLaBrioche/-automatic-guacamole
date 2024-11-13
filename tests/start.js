@@ -1,4 +1,4 @@
-const { Builder } = require("selenium-webdriver");
+const { Builder, until, By } = require("selenium-webdriver");
 const { authorization } = require("./authorization"); 
 const { test1 } = require("./test1");
 const { test2 } = require("./test2");
@@ -12,6 +12,18 @@ const { test4 } = require("./test4");
     let driver = new Builder().forBrowser("safari").build();
     await driver.executeScript("window.moveTo(0,0); window.resizeTo(screen.width, screen.height)")
     
+    // Функция выбор счета
+    async function accountSelection(accountName, accountType) {
+        await driver.wait(until.elementLocated(By.xpath(`//*[@id="dropdown_${accountType}"]/div-tag[2]/a/div-tag/div-tag[1]/span-tag[1]`), 20000));
+        const accountList = await driver.findElements(By.xpath(`//*[@id="dropdown_${accountType}"]/div-tag[2]/a/div-tag/div-tag[1]/span-tag[1]`));
+        for (let acc of accountList) {
+            const text = await acc.getText();
+            if (text === accountName) {
+                await acc.click();
+                break; // Остановимся после первого клика
+                }
+            }
+        }
 
     // Данные для авторизации
     const forAuth = {
@@ -29,6 +41,8 @@ const { test4 } = require("./test4");
         paymentDetails: "Перевод ФЛ внутри банка",
         rcptINN: 0,
         rcptKPP: 0,
+        accountDebitName: "Текущий счет Тест+",
+        accountSelection,
         driver,
     }
 
@@ -41,6 +55,8 @@ const { test4 } = require("./test4");
         paymentDetails: "Перевод ФЛ в сторонний банк",
         rcptINN: 0,
         rcptKPP: 0,
+        accountDebitName: "Текущий счет Тест+",
+        accountSelection,
         driver,
     }
 
@@ -53,6 +69,8 @@ const { test4 } = require("./test4");
         paymentDetails: "Перевод ЮЛ",
         rcptINN: "5050047525",
         rcptKPP: "505001001",
+        accountDebitName: "Текущий счет Тест+",
+        accountSelection,
         driver,
     }
 
@@ -65,7 +83,37 @@ const { test4 } = require("./test4");
         paymentDetails: "Перевод ЮЛ",
         rcptINN: "771587310093",
         rcptKPP: 0,
+        accountDebitName: "Текущий счет Тест+",
+        accountSelection,
         driver,
+    }
+
+    const betweenAccounts = {
+        accountDebitName: "Текущий счет Тест+",
+        accountCreditName: "До востребования Тест+",
+        accountSelection,
+        driver,
+    }
+
+    const forPayCurrency = {
+        accountDebitName: "Текущий счет Тест+",
+        accountSelection,
+        driver,
+    }
+
+    const exchangeRurTry = {
+        accountDebitName: "Текущий счет Тест+",
+        accountCreditName: "Валютный Тест+",
+        accountSelection,
+        driver,
+    }
+
+
+    const exchangeTryRur = {
+        accountDebitName: "Валютный Тест+",
+        accountCreditName: "Текущий счет Тест+",
+        driver,
+        accountSelection,
     }
 
     // Открываем страницу сайта в браузере
@@ -87,22 +135,25 @@ const { test4 } = require("./test4");
     await test1(forPayUL)
     console.log('Тест_1.3 успешно выполнен')
 
-     // Рублевый перевод (ИП)
-     await test1(forPayIP)
-     console.log('Тест_1.4 успешно выполнен')
-
+    // Рублевый перевод (ИП)
+    await test1(forPayIP)
+    console.log('Тест_1.4 успешно выполнен')
 
     // Перевод между своими счетами
-    await test2(driver)
+    await test2(betweenAccounts)
     console.log('Тест_2 успешно выполнен')
 
-    // Валютный переводs
-    await test3(driver)
+    // Валютный перевод
+    await test3(forPayCurrency)
     console.log('Тест_3 успешно выполнен')
 
-    // Обмен валют 
-    await test4(driver)
-    console.log('Тест_4 успешно выполнен')
+    // Обмен валют (рубль-валюта)
+    await test4(exchangeRurTry)
+    console.log('Тест_4.1 успешно выполнен')
+
+    // // Обмен валют (валюта-рубль)
+    // await test4(exchangeTryRur)
+    // console.log('Тест_4.2 успешно выполнен')
 
     // // CБП С2С
     // await test5(driver)
@@ -110,7 +161,6 @@ const { test4 } = require("./test4");
     // // СБП Ме2Ме
     // await test6(driver)
     
-
     console.log('Тестирование успешно завершено')
 }
 

@@ -1,6 +1,6 @@
 const {By, until} = require("selenium-webdriver");
 
- async function test1({driver, rcptName, rcptAccount, rcptBankBic, rcptINN, rcptKPP, paymentDetails, amount}) {
+ async function test1({driver, rcptName, rcptAccount, rcptBankBic, rcptINN, rcptKPP, paymentDetails, amount, accountDebitName, accountSelection}) {
     //Переход на страницу создания рублевого перевода
     await driver.get("https://mb1.bbr.ru/web_banking/protected/doc/rubles_transfer/new");
     //Находим поле Сумма и заполняем
@@ -8,7 +8,7 @@ const {By, until} = require("selenium-webdriver");
     //Находим выпадающий список Списать с
     await driver.findElement(By.className("select-text")).click();
     //Выбираем счет списания
-    await driver.findElement(By.xpath("//*[@id='dropdown_PAYER_ACCOUNT']/div-tag[2]/a[61]")).click();
+    await accountSelection(accountDebitName, 'PAYER_ACCOUNT')
     //Находим и заполняем назначение платежа
     await driver.findElement(By.id("PAYMENT_DETAILS:text_area_with_converter")).sendKeys(paymentDetails);
     //Находим и нажимаем кнопку НДС
@@ -16,11 +16,11 @@ const {By, until} = require("selenium-webdriver");
     //Находим и Заполняем ФИО получателя
     await driver.findElement(By.id("RCPT_NAME")).sendKeys(rcptName);
 
-    //Находим и Заполняем ИНН получателя при наличии
+    //Находим и Заполняем ИНН получателя (при наличии)
     if (rcptINN !== 0) {
         await driver.findElement(By.id("RCPT_INN")).sendKeys(rcptINN);
     }
-    //Находим и Заполняем КПП получателя при наличии
+    //Находим и Заполняем КПП получателя (при наличии)
     if (rcptKPP !== 0) {
         await driver.findElement(By.id("RCPT_KPP")).sendKeys(rcptKPP);
     }
@@ -44,7 +44,7 @@ const {By, until} = require("selenium-webdriver");
     // }, 10000)
     
     //Ожидание выполнения операции 
-    await driver.sleep(6000)
+    await driver.sleep(10000)
 }
 
 module.exports = { test1 } 

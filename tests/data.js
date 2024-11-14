@@ -1,4 +1,4 @@
-const data = [
+const dataTest1 = [
      {
         rcptName: "Белявская Алена Андреевна",
         amount: "101.01",
@@ -41,4 +41,4 @@ const data = [
     }
 ]
 
-module.exports = { data }
+module.exports = { dataTest1 }

@@ -1,6 +1,6 @@
 const {By, until, Key} = require("selenium-webdriver");
 
- async function test3({driver, accountDebitName, accountSelection}) {
+ async function test3({driver, accountDebitName, accountSelection, waitingFinishOperation}) {
 
     //Открытие модального окна "страна" и выбор желаемой по номеру кода
     async function filterListModal(code) {
@@ -99,7 +99,7 @@ const {By, until, Key} = require("selenium-webdriver");
     await driver.wait(until.elementLocated(By.id('j_id_5e_2lc:sendBtn'), 20000));
     //Нажимаем кнопку Отправить в банк
     await driver.findElement(By.id("j_id_5e_2lc:sendBtn")).click(); 
-    await driver.sleep(6000)
+    await waitingFinishOperation()
 }
 
 module.exports = { test3 } 

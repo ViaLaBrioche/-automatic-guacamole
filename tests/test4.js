@@ -1,6 +1,6 @@
 const {By, until} = require("selenium-webdriver");
 
- async function test4({driver, accountSelection, accountDebitName, accountCreditName}) {
+ async function test4({driver, accountSelection, accountDebitName, accountCreditName, waitingFinishOperation}) {
     //Переход на страницу перевода между своими счетами
     await driver.get("https://mb1.bbr.ru/web_banking/protected/doc/currency_exchange/new");
     //Находим поле Сумма списания
@@ -26,7 +26,7 @@ const {By, until} = require("selenium-webdriver");
     await driver.wait(until.elementLocated(By.id('j_id_5e_hv:sendBtn'), 20000));
     //Нажимаем кнопку Отправить в банк
     await driver.findElement(By.id("j_id_5e_hv:sendBtn")).click();
-    await driver.sleep(10000)
+    await waitingFinishOperation()
 }
 
 module.exports = { test4 }

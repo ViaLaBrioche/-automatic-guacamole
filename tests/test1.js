@@ -1,6 +1,6 @@
 const {By, until} = require("selenium-webdriver");
 
- async function test1({driver, rcptName, rcptAccount, rcptBankBic, rcptINN, rcptKPP, paymentDetails, amount, accountDebitName, accountSelection}) {
+ async function test1({driver, rcptName, rcptAccount, rcptBankBic, rcptINN, rcptKPP, paymentDetails, amount, accountDebitName, accountSelection, waitingFinishOperation}) {
     //Переход на страницу создания рублевого перевода
     await driver.get("https://mb1.bbr.ru/web_banking/protected/doc/rubles_transfer/new");
     //Находим поле Сумма и заполняем
@@ -37,14 +37,14 @@ const {By, until} = require("selenium-webdriver");
     await driver.wait(until.elementLocated(By.id('j_id_5e_2ls:sendBtn'), 20000));
     //Нажимаем кнопку отправить в банк
     await driver.findElement(By.id('j_id_5e_2ls:sendBtn')).click();
-
-    //Ожидание выполнения операции ТЕСТ
-    // await driver.wait(async ()=> {
-    // return await driver.findElement(By.xpath("//*[@id='globalMsgBox']/div[1]/div")).getAttribute('style') !== 'display: none;'
-    // }, 10000)
-    
     //Ожидание выполнения операции 
-    await driver.sleep(10000)
+    await waitingFinishOperation()
+    // await driver.wait(async ()=> {
+    //     //Ожидание появления окна уведомления
+    //     await driver.wait(until.elementLocated(By.xpath('//*[@id="globalMsgBox"]/div[1]/div/span'), 10000))
+    //     return await driver.findElement(By.xpath('//*[@id="globalMsgBox"]/div[1]/div/span'))
+    //     .getText() === "Заявление успешно отправлено в банк"
+    //     }, 20000)
 }
 
 module.exports = { test1 } 

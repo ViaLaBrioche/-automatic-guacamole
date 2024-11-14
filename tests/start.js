@@ -4,6 +4,7 @@ const { test1 } = require("./test1");
 const { test2 } = require("./test2");
 const { test3 } = require("./test3");
 const { test4 } = require("./test4");
+const { test5 } = require("./test5 ");
 
  async function start() {
 
@@ -24,11 +25,28 @@ const { test4 } = require("./test4");
                 }
             }
         }
+    // Ожидание завершения операции
+    async function waitingFinishOperation() {
+        await driver.wait(async ()=> {
+        //Ожидание появления окна уведомления
+        await driver.wait(until.elementLocated(By.xpath('//*[@id="globalMsgBox"]/div[1]/div/span'), 10000))
+        return await driver.findElement(By.xpath('//*[@id="globalMsgBox"]/div[1]/div/span'))
+        .getText() === "Заявление успешно отправлено в банк"
+            }, 20000)
+    }
 
     // Данные для авторизации
-    const forAuth = {
-        userLogin: "632140912",
-        userPassword: "222333",
+    const forAuthMb1 = {
+        url: "https://mb1.bbr.ru/web_banking/protected/welcome.jsf",
+        userLogin: "e.volkova",
+        userPassword: "1qaz!QAZ",
+        driver,
+    }
+
+    const forAuthMb = {
+        url: "https://mb.bbr.ru/web_banking/protected/welcome.jsf",
+        userLogin: "sbp_bbr",
+        userPassword: "1qaz!QAZ",
         driver,
     }
 
@@ -42,6 +60,7 @@ const { test4 } = require("./test4");
         rcptINN: 0,
         rcptKPP: 0,
         accountDebitName: "Текущий счет Тест+",
+        waitingFinishOperation,
         accountSelection,
         driver,
     }
@@ -56,6 +75,7 @@ const { test4 } = require("./test4");
         rcptINN: 0,
         rcptKPP: 0,
         accountDebitName: "Текущий счет Тест+",
+        waitingFinishOperation,
         accountSelection,
         driver,
     }
@@ -70,6 +90,7 @@ const { test4 } = require("./test4");
         rcptINN: "5050047525",
         rcptKPP: "505001001",
         accountDebitName: "Текущий счет Тест+",
+        waitingFinishOperation,
         accountSelection,
         driver,
     }
@@ -84,6 +105,7 @@ const { test4 } = require("./test4");
         rcptINN: "771587310093",
         rcptKPP: 0,
         accountDebitName: "Текущий счет Тест+",
+        waitingFinishOperation,
         accountSelection,
         driver,
     }
@@ -91,12 +113,14 @@ const { test4 } = require("./test4");
     const betweenAccounts = {
         accountDebitName: "Текущий счет Тест+",
         accountCreditName: "До востребования Тест+",
+        waitingFinishOperation,
         accountSelection,
         driver,
     }
 
     const forPayCurrency = {
         accountDebitName: "Текущий счет Тест+",
+        waitingFinishOperation,
         accountSelection,
         driver,
     }
@@ -104,6 +128,7 @@ const { test4 } = require("./test4");
     const exchangeRurTry = {
         accountDebitName: "Текущий счет Тест+",
         accountCreditName: "Валютный Тест+",
+        waitingFinishOperation,
         accountSelection,
         driver,
     }
@@ -112,15 +137,15 @@ const { test4 } = require("./test4");
     const exchangeTryRur = {
         accountDebitName: "Валютный Тест+",
         accountCreditName: "Текущий счет Тест+",
-        driver,
         accountSelection,
+        waitingFinishOperation,
+        driver,
+        
     }
+    await driver.get("https://mb.bbr.ru/web_banking/protected/welcome.jsf")
 
-    // Открываем страницу сайта в браузере
-    await driver.get("https://mb1.bbr.ru/web_banking/protected/welcome.jsf")
-
-    // Авторизация
-    await authorization(forAuth)
+    // Авторизация на mb1
+    await authorization(forAuthMb1)
     console.log('Авторизация успешно выполнена')
 
     // Рублевый перевод (ФЛ внутри банка)
@@ -130,6 +155,12 @@ const { test4 } = require("./test4");
     // Рублевый перевод (ФЛ сторонний банк)
     await test1(forPayOtherBankFL)
     console.log('Тест_1.2 успешно выполнен')
+
+    // for (let test of dataTest1) {
+    //     await test1(test);
+    //     let number = 1
+    //     console.log(`Тест_1.${number++} успешно выполнен`)
+    //     }
 
     // Рублевый перевод (ЮЛ)
     await test1(forPayUL)
@@ -151,15 +182,16 @@ const { test4 } = require("./test4");
     await test4(exchangeRurTry)
     console.log('Тест_4.1 успешно выполнен')
 
-    // // Обмен валют (валюта-рубль)
-    // await test4(exchangeTryRur)
-    // console.log('Тест_4.2 успешно выполнен')
+    // // // Обмен валют (валюта-рубль)
+    // // await test4(exchangeTryRur)
+    // // console.log('Тест_4.2 успешно выполнен')
 
-    // // CБП С2С
-    // await test5(driver)
+    
+    // // CБП С2С (не доделан)
+    // await test5(forPayThisBankFL)
 
-    // // СБП Ме2Ме
-    // await test6(driver)
+    // // // СБП Ме2Ме
+    // // await test6(driver)
     
     console.log('Тестирование успешно завершено')
 }

@@ -1,6 +1,8 @@
 const {By, until} = require("selenium-webdriver");
 
- async function authorization({userLogin, userPassword, driver}) {
+ async function authorization({userLogin, userPassword, driver, url}) {
+
+    await driver.get(url)
 
     // Находим поле Логин и заполняем
     await driver.findElement(By.id("j_id_5g_5:login")).sendKeys(userLogin)

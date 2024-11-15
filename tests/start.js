@@ -21,18 +21,25 @@ const { test5 } = require("./test5 ");
             const text = await acc.getText();
             if (text === accountName) {
                 await acc.click();
+                console.log("функция завершилась")
                 break; // Остановимся после первого клика
                 }
             }
         }
-    // Ожидание завершения операции
+
+    //функция ожидания выполнения операции
     async function waitingFinishOperation() {
-        await driver.wait(async ()=> {
-        //Ожидание появления окна уведомления
-        await driver.wait(until.elementLocated(By.xpath('//*[@id="globalMsgBox"]/div[1]/div/span'), 10000))
-        return await driver.findElement(By.xpath('//*[@id="globalMsgBox"]/div[1]/div/span'))
-        .getText() === "Заявление успешно отправлено в банк"
-            }, 20000)
+        await driver.wait(async () => {
+            try {
+                const element = await driver.findElement(By.xpath('//*[@id="globalMsgBox"]/div[1]/div/span'));
+                await driver.wait(until.elementLocated(By.xpath('//*[@id="globalMsgBox"]/div[1]/div/span')), 20000);
+                const text = await element.getText();
+                return text === "Заявление успешно отправлено в банк"; // Возвращаем true или false по результату
+            } catch (error) {
+                // Если элемент не найден, возвращаем false, чтобы попробовать снова
+                return false; 
+            }
+        }, 20000);
     }
 
     // Данные для авторизации

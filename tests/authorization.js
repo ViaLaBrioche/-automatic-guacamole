@@ -13,7 +13,6 @@ const {By, until} = require("selenium-webdriver");
         return await driver.findElement(By.id(elementId)).getAttribute('disabled') === null
         }, 10000)
     }
-
     
     // Запускаем функцию ожидания активации кнопки
     await waitButtonEnabled("j_id_5g_5:loginBtn")
@@ -23,6 +22,7 @@ const {By, until} = require("selenium-webdriver");
     await driver.wait(until.elementLocated(By.id('password_common'), 10000));
     // Находим поле Пароль и заполняем
     await driver.findElement(By.id("password_common")).sendKeys(userPassword)
+    await driver.sleep(1000)
     // Запускаем функцию ожидания активации кнопки
     await waitButtonEnabled("loginButton")
     // Нажимаем кнопку "Войти" на странице ввода пароля и авторизуемся 

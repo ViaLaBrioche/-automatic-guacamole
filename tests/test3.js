@@ -4,14 +4,19 @@ const {By, until, Key} = require("selenium-webdriver");
 
     //Открытие модального окна "страна" и выбор желаемой по номеру кода
     async function filterListModal(code) {
-        await driver.wait(async ()=> {
-            //Ожидание открытия модального окна
-            await driver.wait(until.elementLocated(By.id('REFERENCE:COUNTRIES_REF_SEARCH_FORM:countryCode'), 10000))
-            //Находим и заполняем поле Код страны
+        await driver.wait(async () => {
+            // Находим и заполняем поле Код страны
             await driver.findElement(By.id("REFERENCE:COUNTRIES_REF_SEARCH_FORM:countryCode")).sendKeys(code, Key.ENTER);
-            return await driver.findElement(By.id('REFERENCE:COUNTRIES_REF_DATA_FORM:j_id_5e_15s:prfx_j_id_5e_15s_data:0:country_code'))
-            .getText() === code
-            }, 10000)
+            const countryCodeElement = await driver.findElement(By.id('REFERENCE:COUNTRIES_REF_DATA_FORM:j_id_5e_15s:prfx_j_id_5e_15s_data:0:country_code'));
+            // Получаем текст из элемента, чтобы проверить, совпадает ли он с кодом
+            const countryCodeText = await countryCodeElement.getText();
+            if (countryCodeText === code) {
+                // Если код совпадает, кликаем по элементу
+                await countryCodeElement.click();
+                return true; // Условие выполнено, возвращаем true
+            }
+            return false; // Условие не выполнено, возвращаем false и повторяем действие
+        }, 10000);
     }
 
     
@@ -42,16 +47,12 @@ const {By, until, Key} = require("selenium-webdriver");
     //Находим кнопку Выбрать из справочника (Страна получателя)
     await driver.findElement(By.id('j_id_5e_3d:j_id_5e_3d')).click();
     await console.log(7)
+    //Ожидание открытия модального окна
+    await driver.wait(until.elementLocated(By.id('REFERENCE:COUNTRIES_REF_SEARCH_FORM:countryCode'), 10000))
+    await console.log(7.1)
     //Ожидание окончания фильтрации (Когда первый элемент списка будет иметь значение 840)
     await filterListModal('840')
     await console.log(8)
-
-    //Выбираем страну по клику
-    await driver.findElement(
-        By.xpath("//*[@id='REFERENCE:COUNTRIES_REF_DATA_FORM:j_id_5e_15s:prfx_j_id_5e_15s_data:0:country_name']"))
-        .click();
-
-        await console.log(9)
     //Находим поле город получателя и заполняем его
     await driver.findElement(By.id("RCPT_CITY")).sendKeys('Sarasota');
     await console.log(10)
@@ -65,23 +66,15 @@ const {By, until, Key} = require("selenium-webdriver");
     //Находим кнопку Выбрать из справочника (Страна банка получателя)
     await driver.findElement(By.id('j_id_5e_4l:j_id_5e_4l')).click();
     await console.log(13)
-    await driver.wait(async ()=> {
-        //Ожидание открытия модального окна
-        await driver.wait(until.elementLocated(By.id('REFERENCE:COUNTRIES_REF_SEARCH_FORM:countryCode'), 10000))
-        //Находим и очищаем поле Код страны 
-        await driver.findElement(By.id("REFERENCE:COUNTRIES_REF_SEARCH_FORM:countryCode")).clear()
-        //Находим и заполняем поле Код страны
-        await driver.findElement(By.id("REFERENCE:COUNTRIES_REF_SEARCH_FORM:countryCode")).sendKeys("031", Key.ENTER)
-        //Ожидание фильтрации поиска
-        return await driver.findElement(By.id('REFERENCE:COUNTRIES_REF_DATA_FORM:j_id_5e_15s:prfx_j_id_5e_15s_data:0:country_code'))
-        .getText() === "031"
-        }, 10000)
-        await console.log(14)
-    //Выбираем страну по клику
-    await driver.findElement(
-        By.xpath("//*[@id='REFERENCE:COUNTRIES_REF_DATA_FORM:j_id_5e_15s:prfx_j_id_5e_15s_data:0:country_name']"))
-        .click();
-        await console.log(15)
+     //Ожидание открытия модального окна
+    await driver.wait(until.elementLocated(By.id('REFERENCE:COUNTRIES_REF_SEARCH_FORM:countryCode'), 10000))
+    await console.log(13.1)
+    //Находим и очищаем поле Код страны 
+    await driver.findElement(By.id("REFERENCE:COUNTRIES_REF_SEARCH_FORM:countryCode")).clear()
+    await console.log(14)
+    //Ожидание окончания фильтрации (Когда первый элемент списка будет иметь значение 840)
+    await filterListModal('031')
+    await console.log(15)
     //Находим кнопку Выбрать из справочника (SWIFT банка получателя)
     await driver.findElement(By.id('j_id_5e_47:j_id_5e_47')).click();
     await console.log(16)
@@ -95,7 +88,7 @@ const {By, until, Key} = require("selenium-webdriver");
         .getText() === "AZRTAZ22XXX"
         }, 10000)
         await console.log(17)
-       //Выбираем SWIFT
+    //Выбираем SWIFT
     await driver.findElement(
     By.id("REFERENCE:SWIFT_REF_DATA_FORM:j_id_5e_ll:prfx_j_id_5e_ll_data:0:swift"))
     .click();

@@ -43,17 +43,10 @@ const { test5 } = require("./test5 ");
     }
 
     // Данные для авторизации
-    const forAuthMb1 = {
+    const authData = {
         url: "https://mb1.bbr.ru/web_banking/protected/welcome.jsf",
-        userLogin: "e.volkova",
-        userPassword: "1qaz!QAZ",
-        driver,
-    }
-
-    const forAuthMb = {
-        url: "https://mb.bbr.ru/web_banking/protected/welcome.jsf",
-        userLogin: "sbp_bbr",
-        userPassword: "1qaz!QAZ",
+        userLogin: "632140912",
+        userPassword: "222333",
         driver,
     }
 
@@ -120,6 +113,7 @@ const { test5 } = require("./test5 ");
     const betweenAccounts = {
         accountDebitName: "Текущий счет Тест+",
         accountCreditName: "До востребования Тест+",
+        amount: "102.00",
         waitingFinishOperation,
         accountSelection,
         driver,
@@ -135,6 +129,7 @@ const { test5 } = require("./test5 ");
     const exchangeRurTry = {
         accountDebitName: "Текущий счет Тест+",
         accountCreditName: "Валютный Тест+",
+        amount: "104.00",
         waitingFinishOperation,
         accountSelection,
         driver,
@@ -144,6 +139,7 @@ const { test5 } = require("./test5 ");
     const exchangeTryRur = {
         accountDebitName: "Валютный Тест+",
         accountCreditName: "Текущий счет Тест+",
+        amount: "105.00",
         accountSelection,
         waitingFinishOperation,
         driver,
@@ -152,7 +148,7 @@ const { test5 } = require("./test5 ");
     await driver.get("https://mb.bbr.ru/web_banking/protected/welcome.jsf")
 
     // Авторизация на mb1
-    await authorization(forAuthMb1)
+    await authorization(authData)
     console.log('Авторизация успешно выполнена')
 
     // Рублевый перевод (ФЛ внутри банка)
@@ -194,11 +190,11 @@ const { test5 } = require("./test5 ");
     // // console.log('Тест_4.2 успешно выполнен')
 
     
-    // // CБП С2С (не доделан)
-    // await test5(forPayThisBankFL)
+    // // // CБП С2С (не доделан)
+    // // await test5(forPayThisBankFL)
 
-    // // // СБП Ме2Ме
-    // // await test6(driver)
+    // // // // СБП Ме2Ме
+    // // // await test6(driver)
     
     console.log('Тестирование успешно завершено')
 }

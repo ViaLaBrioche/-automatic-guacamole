@@ -1,10 +1,10 @@
 const {By, until} = require("selenium-webdriver");
 
- async function test2({driver, accountDebitName, accountSelection, accountCreditName, waitingFinishOperation}) {
+ async function test2({driver, accountDebitName, accountSelection, accountCreditName, waitingFinishOperation, amount}) {
     //Переход на страницу перевода между своими счетами
     await driver.get("https://mb1.bbr.ru/web_banking/protected/doc/internal_transfer/new");
     //Находим поле Сумма и заполняем
-    await driver.findElement(By.id("j_id_5e_1g_2_5")).sendKeys(102.02); 
+    await driver.findElement(By.id("j_id_5e_1g_2_5")).sendKeys(amount); 
     await console.log(1)
     //Находим выпадающий список Зачислить на
     await driver.findElement(By.id("dropdown_CREDIT_CURRENCY")).click();

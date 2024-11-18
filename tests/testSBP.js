@@ -1,6 +1,6 @@
 const {By, until, Key} = require("selenium-webdriver");
 
- async function test5({driver, rcptPhoneNumber, rcptBank, amount, accountDebitName, accountSelection, waitingFinishOperation}) {
+ async function testSBP({driver, rcptPhoneNumber, rcptBank, amount, accountDebitName, accountSelection, waitingFinishOperation}) {
     //Переход на страницу создания рублевого перевода
     await driver.get("https://mb.bbr.ru/web_banking/protected/doc/sbp_transfer/new");
     //Находим поле Сумма и заполняем
@@ -30,6 +30,6 @@ const {By, until, Key} = require("selenium-webdriver");
     await waitingFinishOperation()
 }
 
-module.exports = { test5 } 
+module.exports = { testSBP } 
 
 

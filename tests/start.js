@@ -4,7 +4,10 @@ const { test1 } = require("./test1");
 const { test2 } = require("./test2");
 const { test3 } = require("./test3");
 const { test4 } = require("./test4");
-const { test5 } = require("./test5 ");
+
+const { testSBP } = require("./testSBP");
+const { test5 } = require("./test5");
+
 
  async function start() {
 
@@ -135,6 +138,14 @@ const { test5 } = require("./test5 ");
         driver,
     }
 
+    const openDeposit = {
+        accountDebitName: "Текущий счет Тест+",
+        amount: "105.00",
+        waitingFinishOperation,
+        accountSelection,
+        driver,
+    }
+
 
     const exchangeTryRur = {
         accountDebitName: "Валютный Тест+",
@@ -151,50 +162,58 @@ const { test5 } = require("./test5 ");
     await authorization(authData)
     console.log('Авторизация успешно выполнена')
 
-    // Рублевый перевод (ФЛ внутри банка)
-    await test1(forPayThisBankFL)
-    console.log('Тест_1.1 успешно выполнен')
+    // // Рублевый перевод (ФЛ внутри банка)
+    // await test1(forPayThisBankFL)
+    // console.log('Тест_1.1 успешно выполнен')
 
-    // Рублевый перевод (ФЛ сторонний банк)
-    await test1(forPayOtherBankFL)
-    console.log('Тест_1.2 успешно выполнен')
+    // // Рублевый перевод (ФЛ сторонний банк)
+    // await test1(forPayOtherBankFL)
+    // console.log('Тест_1.2 успешно выполнен')
 
-    // for (let test of dataTest1) {
-    //     await test1(test);
-    //     let number = 1
-    //     console.log(`Тест_1.${number++} успешно выполнен`)
-    //     }
+    // // for (let test of dataTest1) {
+    // //     await test1(test);
+    // //     let number = 1
+    // //     console.log(`Тест_1.${number++} успешно выполнен`)
+    // //     }
 
-    // Рублевый перевод (ЮЛ)
-    await test1(forPayUL)
-    console.log('Тест_1.3 успешно выполнен')
+    // // Рублевый перевод (ЮЛ)
+    // await test1(forPayUL)
+    // console.log('Тест_1.3 успешно выполнен')
 
-    // Рублевый перевод (ИП)
-    await test1(forPayIP)
-    console.log('Тест_1.4 успешно выполнен')
+    // // Рублевый перевод (ИП)
+    // await test1(forPayIP)
+    // console.log('Тест_1.4 успешно выполнен')
 
-    // Перевод между своими счетами
-    await test2(betweenAccounts)
-    console.log('Тест_2 успешно выполнен')
+    // // Перевод между своими счетами
+    // await test2(betweenAccounts)
+    // console.log('Тест_2 успешно выполнен')
 
-    // Валютный перевод
-    await test3(forPayCurrency)
-    console.log('Тест_3 успешно выполнен')
+    // // Валютный перевод
+    // await test3(forPayCurrency)
+    // console.log('Тест_3 успешно выполнен')
 
-    // Обмен валют (рубль-валюта)
-    await test4(exchangeRurTry)
-    console.log('Тест_4.1 успешно выполнен')
+    // // Обмен валют (рубль-валюта)
+    // await test4(exchangeRurTry)
+    // console.log('Тест_4.1 успешно выполнен')
 
-    // // // Обмен валют (валюта-рубль)
-    // // await test4(exchangeTryRur)
-    // // console.log('Тест_4.2 успешно выполнен')
+
+    // Открытие вклада (До востребования)
+    await test5(openDeposit)
+    console.log('Тест_5 успешно выполнен')
+
+    // // Обмен валют (валюта-рубль)
+    // await test4(exchangeTryRur)
+    // console.log('Тест_4.2 успешно выполнен')
 
     
-    // // // CБП С2С (не доделан)
-    // // await test5(forPayThisBankFL)
+    // // CБП С2С (не доделан)
+    // await testSBP(forPayThisBankFL)
 
-    // // // // СБП Ме2Ме
-    // // // await test6(driver)
+
+
+    
+
+
     
     console.log('Тестирование успешно завершено')
 }

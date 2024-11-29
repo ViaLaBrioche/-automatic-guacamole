@@ -1,15 +1,19 @@
 const {By, until, Key} = require("selenium-webdriver");
 
- async function test3({driver, accountDebitName, accountSelection, waitingFinishOperation}) {
+ async function test3({driver, accountDebitName, accountSelection, waitingFinishOperation, url}) {
 
     //Открытие модального окна "страна" и выбор желаемой по номеру кода
     async function filterListModal(code) {
         await driver.wait(async () => {
+            await driver.wait(until.elementLocated(By.id("REFERENCE:COUNTRIES_REF_SEARCH_FORM:countryCode"), 20000));
+            await console.log('17.1')
             // Находим и заполняем поле Код страны
             await driver.findElement(By.id("REFERENCE:COUNTRIES_REF_SEARCH_FORM:countryCode")).sendKeys(code, Key.ENTER);
             const countryCodeElement = await driver.findElement(By.id('REFERENCE:COUNTRIES_REF_DATA_FORM:j_id_5e_15s:prfx_j_id_5e_15s_data:0:country_code'));
+            await console.log('17.2')
             // Получаем текст из элемента, чтобы проверить, совпадает ли он с кодом
             const countryCodeText = await countryCodeElement.getText();
+            await console.log('17.2')
             if (countryCodeText === code) {
                 // Если код совпадает, кликаем по элементу
                 await countryCodeElement.click();
@@ -20,10 +24,12 @@ const {By, until, Key} = require("selenium-webdriver");
     }
 
     
-
+    await console.log(0.1)
     //Переход на страницу перевода между своими счетами
-    await driver.get("https://mb1.bbr.ru/web_banking/protected/doc/currency_transfer/new")
-    
+    await driver.get(`https://${url}.bbr.ru/web_banking/protected/doc/currency_transfer/new`)
+    await console.log(0.2)
+    await driver.wait(until.elementLocated(By.id("dropdown_CLN_ACCOUNT"), 20000));
+    await console.log(0.3)
     // Находим выпадающий список Списать с
     await driver.findElement(By.id("dropdown_CLN_ACCOUNT")).click();
     await console.log(1)
@@ -81,8 +87,12 @@ const {By, until, Key} = require("selenium-webdriver");
     await driver.wait(async ()=> {
         //Ожидание открытия модального окна
         await driver.wait(until.elementLocated(By.id('REFERENCE:SWIFT_REF_SEARCH_FORM:mfoText'), 10000))
+        await console.log(161)
         //Находим и заполняем поле SWIFT
         await driver.findElement(By.id("REFERENCE:SWIFT_REF_SEARCH_FORM:mfoText")).sendKeys("AZRTAZ22XXX", Key.ENTER)
+        await console.log(162)
+        await driver.wait(until.elementLocated(By.id("REFERENCE:SWIFT_REF_DATA_FORM:j_id_5e_ll:prfx_j_id_5e_ll_data:0:swift"), 20000));
+        await console.log(163)
         //Ожидание фильтрации поиска
         return await driver.findElement(By.id('REFERENCE:SWIFT_REF_DATA_FORM:j_id_5e_ll:prfx_j_id_5e_ll_data:0:swift'))
         .getText() === "AZRTAZ22XXX"
@@ -108,11 +118,14 @@ const {By, until, Key} = require("selenium-webdriver");
     //нажимаем кнопку Далее
     await driver.findElement(By.id("j_id_5e_eu:nextBtnAjax")).click();
     await console.log(23)
-    //Ожидаем загрузки страницы
-    await driver.wait(until.elementLocated(By.id('j_id_5e_2lc:sendBtn'), 20000));
+    //Ожидание загрузки страницы
+    const btnSubmit = await driver.wait(until.elementLocated(By.xpath('//*[@id="j_id_5e_2lc:sendBtn"]'), 20000));
+    await console.log(24)
+    // Ожидаем видимого состояния кнопки "Отправить в банк"
+    await driver.wait(until.elementIsVisible(btnSubmit), 20000);
     await console.log(24)
     //Нажимаем кнопку Отправить в банк
-    await driver.findElement(By.id("j_id_5e_2lc:sendBtn")).click(); 
+    await btnSubmit.click();
     await console.log(25)
     await waitingFinishOperation()
     await console.log(26)

@@ -1,8 +1,12 @@
 const {By, until} = require("selenium-webdriver");
 
- async function test1({driver, rcptName, rcptAccount, rcptBankBic, rcptINN, rcptKPP, paymentDetails, amount, accountDebitName, accountSelection, waitingFinishOperation}) {
+ async function test1({driver, rcptName, rcptAccount, rcptBankBic, rcptINN, rcptKPP, paymentDetails, amount, accountDebitName, accountSelection, waitingFinishOperation, url}) {
+
     //Переход на страницу создания рублевого перевода
-    await driver.get("https://mb1.bbr.ru/web_banking/protected/doc/rubles_transfer/new");
+    await driver.get(`https://${url}.bbr.ru/web_banking/protected/doc/rubles_transfer/new`);
+    await console.log(0.1)
+    await driver.wait(until.elementLocated(By.id('AMOUNT'), 20000));
+    await console.log(0)
     //Находим поле Сумма и заполняем
     await driver.findElement(By.id("AMOUNT")).sendKeys(amount);
     await console.log(1)
@@ -48,10 +52,12 @@ const {By, until} = require("selenium-webdriver");
     await driver.findElement(By.id("j_id_5e_g4:nextBtnAjax")).click();
     await console.log(4)
     //Ожидание загрузки страницы
-    await driver.wait(until.elementLocated(By.id('j_id_5e_2ls:sendBtn'), 20000));
+    const btnSubmit = await driver.wait(until.elementLocated(By.id('j_id_5e_2ls:sendBtn'), 20000));
+    // Ожидаем видимого состояния кнопки "Отправить в банк"
+    await driver.wait(until.elementIsVisible(btnSubmit), 20000);
     await console.log(5)
     //Нажимаем кнопку отправить в банк
-    await driver.findElement(By.id('j_id_5e_2ls:sendBtn')).click();
+    await btnSubmit.click();
     await console.log(6)
     //Ожидание выполнения операции 
     await waitingFinishOperation()

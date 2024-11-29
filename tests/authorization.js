@@ -2,7 +2,7 @@ const {By, until} = require("selenium-webdriver");
 
  async function authorization({userLogin, userPassword, driver, url}) {
 
-    await driver.get(url)
+    await driver.get(`https://${url}.bbr.ru/web_banking/protected/welcome.jsf`)
 
     // Находим поле Логин и заполняем
     await driver.findElement(By.id("j_id_5g_5:login")).sendKeys(userLogin)

@@ -18,16 +18,18 @@ const {By, until} = require("selenium-webdriver");
     await driver.findElement(By.xpath("//*[@id='agreement:AGREEMENT']/span[1]/label/span")).click();  
     //нажимаем кнопку Далее
     await driver.findElement(By.id("j_id_5e_3j:nextBtnAjax")).click();
-
+try {
     //Ожидаем появления предупреждения
-    const serviceWarningButton = await driver.wait(until.elementLocated(By.xpath('//*[@id="j_id_5e_3j:serviceWarningDlg:serviceWarningDlg:j_id_5e_45"]')), 20000);
-    // Ожидаем видимого состояния элемента
+    const serviceWarningButton = await driver.wait(
+        until.elementLocated(By.xpath('//*[@id="j_id_5e_3j:serviceWarningDlg:serviceWarningDlg:j_id_5e_45"]')), 20000);
+    // Проверяем видимость кнопки предупреждения
     await driver.wait(until.elementIsVisible(serviceWarningButton), 20000);
-    //Подтверждаем кнопкой Да
+    // Подтверждаем кнопкой Да
     await serviceWarningButton.click();
-    //Ожидаем загрузки страницы
+} catch (error) {
+    console.log('Кнопка предупреждения не найдена или не видима. Продолжаем...');
+}
     await driver.wait(until.elementLocated(By.id('j_id_5e_hv:sendBtn')), 20000);
-    //Нажимаем кнопку Отправить в банк
     await driver.findElement(By.id("j_id_5e_hv:sendBtn")).click();
     await waitingFinishOperation()
 }

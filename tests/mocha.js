@@ -44,7 +44,7 @@ describe("Тесты с Selenium", function () {
             }
         }, 20000);
     };
-
+    // учетная запись
     it("Авторизация", async function() {
         const authData = {
             url,
@@ -116,7 +116,7 @@ describe("Тесты с Selenium", function () {
             amount: "101.04",
             rcptAccount: "40802810202100001918",
             rcptBankBic: "044525225",
-            paymentDetails: "Перевод ЮЛ",
+            paymentDetails: "Перевод ИП",
             rcptINN: "771587310093",
             rcptKPP: 0,
             accountDebitName: "Текущий счет Тест+",
@@ -162,6 +162,19 @@ describe("Тесты с Selenium", function () {
             driver,
         }
         await test4(exchangeRurTry)
+    });
+
+    it("Обмен валют", async function() {
+        const exchangeTryRur = {
+            url,
+            accountDebitName: "Валютный счет Тест+",
+            accountCreditName: "Текущий счет Тест+",
+            amount: "1.00",
+            waitingFinishOperation,
+            accountSelection,
+            driver,
+        }
+        await test4(exchangeTryRur)
     });
 
     it("Открытие вклада", async function() {
